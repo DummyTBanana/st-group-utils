@@ -53,7 +53,7 @@ function rearrangeChat(chat){
   for (let i = 0; i < group.members.length; i++) {
     const element = group.members[i];
     const character = getCharacter(element)
-    if (character){
+    if (character && context.name2 != character.name){
       const hasDesc = phraseTester.test(character.description)
       const hasPersonality = phraseTester.test(character.personality)
       if (hasDesc && hasPersonality){
