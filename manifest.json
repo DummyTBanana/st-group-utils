@@ -1,11 +1,12 @@
 {
-    "display_name": "Name Displayed in SillyTavern",
+    "display_name": "Group Character Info",
     "loading_order": 9,
     "requires": [],
     "optional": [],
     "js": "index.js",
     "css": "style.css",
-    "author": "yourNameHere",
+    "generate_interceptor": "gchar_genIntercept",
+    "author": "Ubunifu",
     "version": "1.0.0",
-    "homePage": "yourUrlHere"
+    "homePage": "https://github.com/DummyTBanana/st-extension-group-character-note"
 }
