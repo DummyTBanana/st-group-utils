@@ -54,35 +54,56 @@ function getText(text){
   else{return t+"."}
 }
 
+function CreateSystemNote(text) {
+  return {
+    "name": "System",
+    "is_user": false,
+    "is_system": true, 
+    "send_date": new Date().toISOString(),
+    "mes": text,
+    "index": chat.length
+  };
+}
+
 function rearrangeChat(chat){
   const context = getContext()
   const group = getGroup(context.groupId)
-  if (!group) { return; }
-  var notes = []
+  let characters = []
   for (let i = 0; i < group.members.length; i++) {
     const element = group.members[i];
     const character = getCharacter(element)
     if (character && context.name2 == character.name){
-      const hasDesc = phraseTester.test(character.description)
-      const hasPersonality = phraseTester.test(character.personality)
-      if (hasDesc && hasPersonality){
-        const desc = getText(character.description).replaceAll("{{char}}",character.name)
-        const person = getText(character.personality).replaceAll("{{char}}",character.name)
-        notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
-      }
+      characters.push(character)
     }
   }
+  if (extension_settings[extensionName].share_character_info) {
+    if (!group) { return; }
+    var notes = []
+    for (let i = 0; i < characters.length; i++) {
+      const character = characters[i];
+      if (character && context.name2 == character.name){
+        const hasDesc = phraseTester.test(character.description)
+        const hasPersonality = phraseTester.test(character.personality)
+        if (hasDesc && hasPersonality){
+          const desc = getText(character.description).replaceAll("{{char}}",character.name)
+          const person = getText(character.personality).replaceAll("{{char}}",character.name)
+          notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
+        }
+      }
+    }
 
-  const systemNote = {
-      "name": "System",
-      "is_user": false,
-      "is_system": true, 
-      "send_date": new Date().toISOString(),
-      "mes": notes.join("\n"),
-      "index": chat.length
-  };
-
-  chat.push(systemNote);
+    const systemNote = CreateSystemNote(notes.join("\n"))
+    chat.push(systemNote);
+  }
+  let newChat = []
+  for (let i = 0; i < chat.length; i++) {
+    let message = chat[i];
+    const content = message.mes
+    let r = content.replaceAll("{{character_list}}",characters.map(obj => obj.name).join(', '))
+    message.mes=r
+    newChat.push(message)
+  }
+  chat = newChat
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
