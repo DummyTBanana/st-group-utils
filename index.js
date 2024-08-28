@@ -15,9 +15,11 @@ const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
 
-const phraseTester = /.{0,200}\./
 
 
+function getPhraseTester(){
+  return new RegExp(`.{0,200}\\${extension_settings[extensionName].share_stopper}`);
+}
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
 async function loadSettings() {
@@ -68,6 +70,7 @@ function CreateSystemNote(text) {
 }
 
 function rearrangeChat(chat){
+  const phraseTester = getPhraseTester()
   const context = getContext()
   const group = getGroup(context.groupId)
   let characters = []
