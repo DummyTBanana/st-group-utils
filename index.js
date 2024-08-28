@@ -9,7 +9,7 @@ import { groups } from "../../../group-chats.js";
 import { saveSettingsDebounced,characters } from "../../../../script.js";
 
 // Keep track of where your extension is located, name should match repo name
-const extensionName = "st-extension-example";
+const extensionName = "st-extension-group-character-note";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
