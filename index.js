@@ -14,7 +14,7 @@ const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
 
-const phraseTester = /(.+($|\.)){1}/
+const phraseTester = /.{0,200}\./
 
 
  
@@ -45,6 +45,15 @@ function getCharacter(characterPNG)
   return null
 }
 
+function getText(text){
+  let t = phraseTester.exec(text)[0]
+  if (t[t.length-1] == ".")
+  {return t}
+  else if (t[t.length-1] == ",")
+  {return t.replace(/(,$)/, '.');}
+  else{return t+"."}
+}
+
 function rearrangeChat(chat){
   const context = getContext()
   const group = getGroup(context.groupId)
@@ -57,23 +66,22 @@ function rearrangeChat(chat){
       const hasDesc = phraseTester.test(character.description)
       const hasPersonality = phraseTester.test(character.personality)
       if (hasDesc && hasPersonality){
-        const desc = phraseTester.exec(character.description)[0].replaceAll("{{char}}",character.name)
-        const person = phraseTester.exec(character.personality)[0].replaceAll("{{char}}",character.name)
+        const desc = getText(character.description).replaceAll("{{char}}",character.name)
+        const person = getText(character.personality).replaceAll("{{char}}",character.name)
         notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
       }
     }
   }
-  // System message to be inserted
+
   const systemNote = {
       "name": "System",
       "is_user": false,
-      "is_system": true, // Ensure this flag is correctly set
+      "is_system": true, 
       "send_date": new Date().toISOString(),
       "mes": notes.join("\n"),
       "index": chat.length
   };
 
-  // Append system message at the end of the chat
   chat.push(systemNote);
 }
 
