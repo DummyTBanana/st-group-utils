@@ -14,7 +14,7 @@ const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
 
-const phraseTester = /(.+\.){1}/
+const phraseTester = /(.+($|\.)){1}/
 
 
  
@@ -38,18 +38,32 @@ function getGroup(groupId){
 
 function getCharacter(characterPNG)
 {
-  console.log(characters)
+  for (let i = 0; i < characters.length; i++) {
+    const element = characters[i];
+    if (element.avatar == characterPNG){return element}
+  }
+  return null
 }
 
 function rearrangeChat(chat){
   const context = getContext()
   const group = getGroup(context.groupId)
   if (!group) { return; }
+  var notes = []
   for (let i = 0; i < group.members.length; i++) {
     const element = group.members[i];
-    console.log(getCharacter(element))
+    const character = getCharacter(element)
+    if (character){
+      const hasDesc = phraseTester.test(character.description)
+      const hasPersonality = phraseTester.test(character.personality)
+      if (hasDesc && hasPersonality){
+        const desc = phraseTester.exec(character.description)[0].replace("{{char}}",character.name)
+        const person = phraseTester.exec(character.personality)[0].replace("{{char}}",character.name)
+        notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
+      }
+    }
   }
-  var notes = {}
+  console.log(notes.join("\n"))
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
