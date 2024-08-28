@@ -4,6 +4,7 @@
 //You'll likely need to import extension_settings, getContext, and loadExtensionSettings from extensions.js
 import { extension_settings, getContext } from "../../../extensions.js";
 import { groups } from "../../../group-chats.js";
+import { MacrosParser } from '../../../macros.js';
 
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced,characters } from "../../../../script.js";
@@ -81,7 +82,7 @@ function rearrangeChat(chat){
     var notes = []
     for (let i = 0; i < characters.length; i++) {
       const character = characters[i];
-      if (character && context.name2 == character.name){
+      if (character && context.name2 != character.name){
         const hasDesc = phraseTester.test(character.description)
         const hasPersonality = phraseTester.test(character.personality)
         if (hasDesc && hasPersonality){
@@ -95,22 +96,42 @@ function rearrangeChat(chat){
     const systemNote = CreateSystemNote(notes.join("\n"))
     chat.push(systemNote);
   }
-  for (let i = 0; i < chat.length; i++) {
-    let message = chat[i];
-    const content = message.mes
-    let r = content.replaceAll("{{character_list}}",characters.filter(x=>x.name != context.name2).map(obj => obj.name).join(', '))
-    r = r.replaceAll("{{character_list_all}}",characters.filter(x=>x.name != context.name2).map(obj => obj.name).join(', '))
-    message.mes=r
-    chat[i] = message
-  }
-  console.log(chat)
-  console.log(context)
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
 
 // This function is called when the extension is loaded
 jQuery(async () => {
+  MacrosParser.registerMacro('character_list',function(){
+    const context = getContext()
+    const group = getGroup(context.groupId)
+    if (!group){return context.name2}
+    let characters = []
+    for (let i = 0; i < group.members.length; i++) {
+      const element = group.members[i];
+      const character = getCharacter(element)
+      if (character && character.name != character.name2){
+        characters.push(character)
+      }
+    }
+    return array.map(obj => obj.name).join(', ');
+  })
+  MacrosParser.registerMacro('character_list_all',function(){
+    const context = getContext()
+    const group = getGroup(context.groupId)
+    if (!group){return context.name2}
+    let characters = []
+    for (let i = 0; i < group.members.length; i++) {
+      const element = group.members[i];
+      const character = getCharacter(element)
+      if (character){
+        characters.push(character)
+      }
+    }
+    return array.map(obj => obj.name).join(', ');
+  })
+
+
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
   $("#extensions_settings2").append(settingsHtml);
   $("#share_character_info").on("input", function(event){
