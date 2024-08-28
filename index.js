@@ -90,7 +90,7 @@ window['gchar_genIntercept'] = rearrangeChat;
 // This function is called when the extension is loaded
 jQuery(async () => {
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
-  $("#extensions_settings").append(settingsHtml);
+  $("#extensions_settings2").append(settingsHtml);
   $("#share_character_info").on("input", function(event){
     const value = Boolean($(event.target).prop("checked"));
     extension_settings[extensionName].share_character_info = value;
