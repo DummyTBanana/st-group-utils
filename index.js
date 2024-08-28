@@ -53,7 +53,7 @@ function rearrangeChat(chat){
   for (let i = 0; i < group.members.length; i++) {
     const element = group.members[i];
     const character = getCharacter(element)
-    if (character && context.name2 != character.name){
+    if (character && context.name2 == character.name){
       const hasDesc = phraseTester.test(character.description)
       const hasPersonality = phraseTester.test(character.personality)
       if (hasDesc && hasPersonality){
@@ -63,7 +63,18 @@ function rearrangeChat(chat){
       }
     }
   }
-  console.log(notes.join("\n"))
+  // System message to be inserted
+  const systemNote = {
+      "name": "System",
+      "is_user": false,
+      "is_system": true, // Ensure this flag is correctly set
+      "send_date": new Date().toISOString(),
+      "mes": notes.join("\n"),
+      "index": chat.length
+  };
+
+  // Append system message at the end of the chat
+  chat.push(systemNote);
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
