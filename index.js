@@ -114,7 +114,7 @@ jQuery(async () => {
         characters.push(character)
       }
     }
-    return array.map(obj => obj.name).join(', ');
+    return characters.map(obj => obj.name).join(', ');
   })
   MacrosParser.registerMacro('character_list_all',function(){
     const context = getContext()
@@ -128,7 +128,7 @@ jQuery(async () => {
         characters.push(character)
       }
     }
-    return array.map(obj => obj.name).join(', ');
+    return characters.map(obj => obj.name).join(', ');
   })
 
 
