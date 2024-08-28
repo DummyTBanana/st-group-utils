@@ -104,7 +104,7 @@ function rearrangeChat(chat){
     message.mes=r
     newChat.push(message)
   }
-  chat = newChat
+  chat.length = 0
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
