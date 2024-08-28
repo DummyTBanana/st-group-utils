@@ -45,6 +45,10 @@ function rearrangeChat(chat){
   const context = getContext()
   const group = getGroup(context.groupId)
   if (!group) { return; }
+  for (let i = 0; i < group.members.length; i++) {
+    const element = group.members[i];
+    console.log(getCharacter(element))
+  }
   var notes = {}
 }
 
