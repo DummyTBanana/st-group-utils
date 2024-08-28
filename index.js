@@ -28,9 +28,9 @@ async function loadSettings() {
   if (Object.keys(extension_settings[extensionName]).length === 0) {
     Object.assign(extension_settings[extensionName], defaultSettings);
   }
-  $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info).trigger("input");
-  $("#share_stopper").val(extension_settings[extensionName].share_stopper).trigger("input");
-  $("#max_share_length").val(extension_settings[extensionName].max_share_length).trigger("input");
+  $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info || true).trigger("input");
+  $("#share_stopper").val(extension_settings[extensionName].share_stopper || '.').trigger("input");
+  $("#max_share_length").val(extension_settings[extensionName].max_share_length || 200).trigger("input");
 }
 
 function getGroup(groupId){
