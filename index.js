@@ -51,6 +51,7 @@ function getCharacter(characterPNG)
 }
 
 function getText(text){
+  const phraseTester = getPhraseTester()
   let t = phraseTester.exec(text)[0]
   if (t[t.length-1] == ".")
   {return t}
