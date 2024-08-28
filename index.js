@@ -27,7 +27,7 @@ async function loadSettings() {
   }
 }
 
-function getGroup(){
+function getGroup(groupId){
   const group = groups.find((x) => x.id.toString() === groupId);
   if (!group) {
       console.warn('Group not found', groupId);
