@@ -18,7 +18,7 @@ const defaultSettings = {};
 
 
 function getPhraseTester(){
-  return new RegExp(`.{0,200}\\${extension_settings[extensionName].share_stopper}`);
+  return new RegExp(`.{0,${extension_settings[extensionName].max_share_length}}?(?=(\\${extension_settings[extensionName].share_stopper}|$))`);
 }
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -30,6 +30,7 @@ async function loadSettings() {
   }
   $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info).trigger("input");
   $("#share_stopper").val(extension_settings[extensionName].share_stopper).trigger("input");
+  $("#max_share_length").val(extension_settings[extensionName].max_share_length).trigger("input");
 }
 
 function getGroup(groupId){
@@ -146,6 +147,11 @@ jQuery(async () => {
   $("#share_stopper").on("input", function(event){
     const value = $(event.target).val();
     extension_settings[extensionName].share_stopper = value;
+    saveSettingsDebounced();
+  });
+  $("#max_share_length").on("input", function(event){
+    const value = $(event.target).val();
+    extension_settings[extensionName].max_share_length = value;
     saveSettingsDebounced();
   });
 
