@@ -95,14 +95,13 @@ function rearrangeChat(chat){
     const systemNote = CreateSystemNote(notes.join("\n"))
     chat.push(systemNote);
   }
-  let newChat = []
   for (let i = 0; i < chat.length; i++) {
     let message = chat[i];
     const content = message.mes
     let r = content.replaceAll("{{character_list}}",characters.filter(x=>x.name != context.name2).map(obj => obj.name).join(', '))
     r = r.replaceAll("{{character_list_all}}",characters.filter(x=>x.name != context.name2).map(obj => obj.name).join(', '))
     message.mes=r
-    newChat.push(message)
+    chat[i] = message
   }
   console.log(chat)
   console.log(context)
