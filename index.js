@@ -95,9 +95,9 @@ function rearrangeChat(chat){
         }
       }
     }
-
     const systemNote = CreateSystemNote(notes.join("\n"))
     chat.push(systemNote);
+    print(chat)
   }
 }
 
