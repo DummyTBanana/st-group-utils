@@ -88,9 +88,7 @@ function rearrangeChat(chat){
     for (let i = 0; i < characters.length; i++) {
       const character = characters[i];
       if (character && context.name2 != character.name){
-        const hasDesc = phraseTester.test(character.description)
-        const hasPersonality = phraseTester.test(character.personality)
-        if (hasDesc && hasPersonality){
+        if (character.description.length > 0 && character.personality.length > 0){
           const desc = getText(character.description).replaceAll("{{char}}",character.name)
           const person = getText(character.personality).replaceAll("{{char}}",character.name)
           notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
