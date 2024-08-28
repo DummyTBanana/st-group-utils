@@ -3,6 +3,7 @@
 
 //You'll likely need to import extension_settings, getContext, and loadExtensionSettings from extensions.js
 import { extension_settings, getContext } from "../../../extensions.js";
+import { groups } from "../../../group-chats.js";
 
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced } from "../../../../script.js";
@@ -26,9 +27,18 @@ async function loadSettings() {
   }
 }
 
+function getGroup(){
+  const group = groups.find((x) => x.id.toString() === groupId);
+  if (!group) {
+      console.warn('Group not found', groupId);
+      return;
+  }
+  return group
+}
+
 function rearrangeChat(chat){
   const context = getContext()
-  console.log(context)
+  console.log(getGroup(context.groupId))
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
