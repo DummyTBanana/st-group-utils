@@ -31,6 +31,7 @@ async function loadSettings() {
   $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info || true).trigger("input");
   $("#share_stopper").val(extension_settings[extensionName].share_stopper || '.').trigger("input");
   $("#max_share_length").val(extension_settings[extensionName].max_share_length || 200).trigger("input");
+  $("#max_characters").val(extension_settings[extensionName].max_characters || -1).trigger("input");
 }
 
 function getGroup(groupId){
@@ -86,7 +87,8 @@ function rearrangeChat(chat){
   if (extension_settings[extensionName].share_character_info) {
     if (!group) { return; }
     var notes = []
-    for (let i = 0; i < characters.length; i++) {
+    let maxCharacters = Math.min(characters.length,extension_settings[extensionName].max_characters == -1 && characters.length || extension_settings[extensionName].max_characters)
+    for (let i = 0; i < maxCharacters; i++) {
       const character = characters[i];
       if (character && context.name2 != character.name){
         if (character.description.length > 0 && character.personality.length > 0){
@@ -98,7 +100,6 @@ function rearrangeChat(chat){
     }
     const systemNote = CreateSystemNote(notes.join("\n"))
     chat.push(systemNote);
-    print(chat)
   }
 }
 
@@ -151,6 +152,11 @@ jQuery(async () => {
   $("#max_share_length").on("input", function(event){
     const value = $(event.target).val();
     extension_settings[extensionName].max_share_length = value;
+    saveSettingsDebounced();
+  });
+  $("#max_characters").on("input", function(event){
+    const value = $(event.target).val();
+    extension_settings[extensionName].max_characters = value;
     saveSettingsDebounced();
   });
 
