@@ -6,7 +6,7 @@ import { extension_settings, getContext } from "../../../extensions.js";
 import { groups } from "../../../group-chats.js";
 
 //You'll likely need to import some other functions from the main script
-import { saveSettingsDebounced } from "../../../../script.js";
+import { saveSettingsDebounced,characters } from "../../../../script.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-extension-example";
@@ -36,9 +36,16 @@ function getGroup(groupId){
   return group
 }
 
+function getCharacter(characterPNG)
+{
+  console.log(characters)
+}
+
 function rearrangeChat(chat){
   const context = getContext()
-  console.log(getGroup(context.groupId))
+  const group = getGroup(context.groupId)
+  if (!group) { return; }
+  var notes = {}
 }
 
 window['gchar_genIntercept'] = rearrangeChat;
