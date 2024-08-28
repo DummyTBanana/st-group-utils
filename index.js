@@ -141,7 +141,7 @@ jQuery(async () => {
     saveSettingsDebounced();
   });
   $("#share_stopper").on("input", function(event){
-    const value = $(event.target).val("checked");
+    const value = $(event.target).val();
     extension_settings[extensionName].share_stopper = value;
     saveSettingsDebounced();
   });
