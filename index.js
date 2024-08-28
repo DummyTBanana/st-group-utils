@@ -27,6 +27,7 @@ async function loadSettings() {
     Object.assign(extension_settings[extensionName], defaultSettings);
   }
   $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info).trigger("input");
+  $("#share_stopper").val(extension_settings[extensionName].share_stopper).trigger("input");
 }
 
 function getGroup(groupId){
@@ -137,6 +138,11 @@ jQuery(async () => {
   $("#share_character_info").on("input", function(event){
     const value = Boolean($(event.target).prop("checked"));
     extension_settings[extensionName].share_character_info = value;
+    saveSettingsDebounced();
+  });
+  $("#share_stopper").on("input", function(event){
+    const value = $(event.target).val("checked");
+    extension_settings[extensionName].share_stopper = value;
     saveSettingsDebounced();
   });
 
