@@ -73,33 +73,40 @@ function CreateSystemNote(text) {
 }
 
 function rearrangeChat(chat){
-  const phraseTester = getPhraseTester()
-  const context = getContext()
-  const group = getGroup(context.groupId)
-  let characters = []
-  for (let i = 0; i < group.members.length; i++) {
-    const element = group.members[i];
-    const character = getCharacter(element)
-    if (character){
-      characters.push(character)
-    }
-  }
-  if (extension_settings[extensionName].share_character_info) {
-    if (!group) { return; }
-    var notes = []
-    let maxCharacters = Math.min(characters.length,extension_settings[extensionName].max_characters == -1 && characters.length || extension_settings[extensionName].max_characters)
-    for (let i = 0; i < maxCharacters; i++) {
-      const character = characters[i];
-      if (character && context.name2 != character.name){
-        if (character.description.length > 0 && character.personality.length > 0){
-          const desc = getText(character.description).replaceAll("{{char}}",character.name)
-          const person = getText(character.personality).replaceAll("{{char}}",character.name)
-          notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
-        }
+  try{
+    const context = getContext()
+    const group = getGroup(context.groupId)
+    let char_list = []
+    for (let i = 0; i < group.members.length; i++) {
+      const element = group.members[i];
+      const character = getCharacter(element)
+      if (character){
+        char_list.push(character)
       }
     }
-    const systemNote = CreateSystemNote(notes.join("\n"))
-    chat.push(systemNote);
+    if (extension_settings[extensionName].share_character_info) {
+      if (group){
+        var notes = []
+        let maxCharacters = Math.min(char_list.length,extension_settings[extensionName].max_characters == -1 && char_list.length || extension_settings[extensionName].max_characters)
+        for (let i = 0; i < maxCharacters; i++) {
+          const character = char_list[i];
+          if (character && context.name2 != character.name){
+            if (character.description.length > 0 && character.personality.length > 0){
+              const desc = getText(character.description).replaceAll("{{char}}",character.name)
+              const person = getText(character.personality).replaceAll("{{char}}",character.name)
+              notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
+            }
+          }
+        }
+        const systemNote = CreateSystemNote(notes.join("\n"))
+        chat.push(systemNote);
+      }
+    }
+  }catch(e){
+    toastr.error(
+      e,
+      'An Error Occured!'
+    )
   }
 }
 
