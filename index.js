@@ -125,7 +125,7 @@ jQuery(async () => {
     for (let i = 0; i < group.members.length; i++) {
       const element = group.members[i];
       const character = getCharacter(element)
-      if (character && character.name != character.name2 && character.description.length > 0 && character.personality.length > 0){
+      if (character && character.name != context.name2 && character.description.length > 0 && character.personality.length > 0){
         characters.push(character)
       }
     }
