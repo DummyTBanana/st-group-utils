@@ -117,7 +117,7 @@ window['gchar_genIntercept'] = rearrangeChat;
 
 // This function is called when the extension is loaded
 jQuery(async () => {
-  MacrosParser.registerMacro('character_list',function(){
+  MacrosParser.registerMacro('char_list',function(){
     const context = getContext()
     const group = getGroup(context.groupId)
     if (!group){return context.name2}
@@ -131,7 +131,7 @@ jQuery(async () => {
     }
     return characters.map(obj => obj.name).join(', ');
   })
-  MacrosParser.registerMacro('character_list_all',function(){
+  MacrosParser.registerMacro('char_list_all',function(){
     const context = getContext()
     const group = getGroup(context.groupId)
     if (!group){return context.name2}
