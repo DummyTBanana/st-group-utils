@@ -14,9 +14,15 @@ import { SlashCommandClosure } from "../../../../scripts/slash-commands/SlashCom
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-group-utils";
 const EXTENSION_PROMPT_KEY = "ub_grouputils"
+const EXTENSION_PROMPT_KEY_CHAR = "ub_grouputils_char"
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
-const defaultSettings = {};
+const settings = {
+  char_position: 0,
+  position: 1,
+  depth: 4,
+  include_wi: false
+}
 
 function countTokens(text){
   if (text instanceof SlashCommandClosure || Array.isArray(text)) throw new Error('Unnamed argument cannot be a closure for command /tokens');
@@ -38,13 +44,15 @@ async function loadSettings() {
   //Create the settings if they don't exist
   extension_settings[extensionName] = extension_settings[extensionName] || {};
   if (Object.keys(extension_settings[extensionName]).length === 0) {
-    Object.assign(extension_settings[extensionName], defaultSettings);
+    Object.assign(extension_settings[extensionName], settings);
   }
+  settings.depth = extension_settings[extensionName].depth
+  settings.include_wi = extension_settings[extensionName].include_wi
   $("#share_character_info").prop("checked", extension_settings[extensionName].share_character_info || true).trigger("input");
-  $("#include_worldinfo").prop("checked", extension_settings[extensionName].include_worldinfo || true).trigger("input");
+  $("#include_worldinfo").prop("checked", extension_settings[extensionName].include_wi || true).trigger("input");
   $("#share_stopper").val(extension_settings[extensionName].share_stopper || '.').trigger("input");
   $("#max_share_length").val(extension_settings[extensionName].max_share_length || 200).trigger("input");
-  $("#text_depth").val(extension_settings[extensionName].text_depth || 4).trigger("input");
+  $("#text_depth").val(extension_settings[extensionName].depth || 4).trigger("input");
   $("#max_characters").val(extension_settings[extensionName].max_characters || -1).trigger("input");
 }
 
@@ -99,9 +107,10 @@ async function getText(text=String){
 }
 
 
-function rearrangeChat(chat){
-  setExtensionPrompt(EXTENSION_PROMPT_KEY,'',1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
+async function rearrangeChat(chat){
   try{
+    setExtensionPrompt(EXTENSION_PROMPT_KEY, '', settings.position, settings.depth, settings.include_wi);
+    setExtensionPrompt(EXTENSION_PROMPT_KEY_CHAR, '', settings.char_position, settings.depth, settings.include_wi);
     const context = getContext()
     const group = getGroup(context.groupId)
     const generating_name = context.name2
@@ -133,7 +142,8 @@ function rearrangeChat(chat){
         }
       }
     }
-    setExtensionPrompt(EXTENSION_PROMPT_KEY,system_notes.join("\n")+"\n"+character_description.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
+    setExtensionPrompt(EXTENSION_PROMPT_KEY, system_notes.join("\n"), settings.position, settings.depth, settings.include_wi);
+    setExtensionPrompt(EXTENSION_PROMPT_KEY_CHAR, character_description.join("\n"), settings.char_position, settings.depth, settings.include_wi);
   }catch(e){
     console.log(e)
     toastr.error(
@@ -203,11 +213,6 @@ jQuery(async () => {
     extension_settings[extensionName].share_character_info = value;
     saveSettingsDebounced();
   });
-  $("#include_worldinfo").on("input", function(event){
-    const value = Boolean($(event.target).prop("checked"));
-    extension_settings[extensionName].include_worldinfo = value;
-    saveSettingsDebounced();
-  });
   $("#share_stopper").on("input", function(event){
     const value = $(event.target).val();
     extension_settings[extensionName].share_stopper = value;
@@ -216,11 +221,6 @@ jQuery(async () => {
   $("#max_share_length").on("input", function(event){
     const value = $(event.target).val();
     extension_settings[extensionName].max_share_length = value;
-    saveSettingsDebounced();
-  });
-  $("#text_depth").on("input", function(event){
-    const value = $(event.target).val();
-    extension_settings[extensionName].text_depth = value;
     saveSettingsDebounced();
   });
   $("#max_characters").on("input", function(event){
@@ -240,5 +240,20 @@ jQuery(async () => {
     extension_settings[extensionName]['character_data'][character.name] = value
     saveSettingsDebounced();
   })
+
+  // Chat Injection
+  $("#include_worldinfo").on("input",function(event){
+    const value = $(event.target).val();
+    settings.include_wi = Boolean(value)
+    extension_settings[extensionName].include_wi = Boolean(value)
+    saveSettingsDebounced()
+  })
+  $("#text_depth").on("input",function(event){
+    const value = $(event.target).val();
+    settings.depth = parseFloat(value)
+    extension_settings[extensionName].depth = parseFloat(value)
+    saveSettingsDebounced()
+  })
+
   loadSettings();
 });
