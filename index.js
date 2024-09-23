@@ -7,7 +7,7 @@ import { groups } from "../../../group-chats.js";
 import { MacrosParser } from '../../../macros.js';
 
 //You'll likely need to import some other functions from the main script
-import { saveSettingsDebounced, characters, setExtensionPrompt, saveCharacterDebounced } from "../../../../script.js";
+import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "../../../../script.js";
 import { getTokenCountAsync } from "../../../../scripts/tokenizers.js";
 import { SlashCommandClosure } from "../../../../scripts/slash-commands/SlashCommandClosure.js";
 
@@ -103,17 +103,33 @@ function rearrangeChat(chat){
   try{
     const context = getContext()
     const group = getGroup(context.groupId)
+    const generating_name = context.name2
     if (!group) return;
     if (!extension_settings[extensionName].share_character_info) return;
-    let char_list = []
-    console.log(context)
+    let system_notes = []
+    let character_description = []
     for (let i = 0; i < group.members.length; i++) {
       const element = group.members[i];
       const character = getCharacterByName(element.split(".png")[0])
       if (character){
-
+        if (character.name == generating_name){
+          if (character.description.length > 0 && character.personality.length > 0) {
+            getText(character.description).then((desc) => {
+              getText(character.personality).then((pers) => {
+                character_description.push(`${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`);
+              });
+            });
+          }
+        } else {
+          const note = extension_settings[extensionName]['character_data'][character.name] || "";
+          if (note !== undefined && note !== null) {
+            system_notes.push(note.toString().replaceAll("{{char}}",character.name));
+          }
+        }
       }
     }
+    setExtensionPrompt(EXTENSION_PROMPT_KEY+"_character_data",character_description.join("\n"),0,MAX_INJECTION_DEPTH - 1,extension_settings[extensionName].include_worldinfo)
+    setExtensionPrompt(EXTENSION_PROMPT_KEY,system_notes.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
   }catch(e){
     toastr.error(
       e,
