@@ -72,41 +72,26 @@ async function getText(text) {
 
   // Step 1: Check if the stopper exists in the text and truncate it if found
   if (text.includes(stopper)) {
-    console.log(`Found stopper: ${stopper}`);
-    text = text.split(stopper)[0];  // Truncate the text at the stopper
+    return text.split(stopper)[0];
   }
-
-  // Step 2: Get the token count of the current text
-  let tokenCount = await countTokens(text);
-  console.log(`Initial token count: ${tokenCount}`);
-
-  // Step 3: If the token count exceeds maxLength, truncate the text
-  if (tokenCount > maxLength) {
-    let truncatedText = "";
-    const words = text.split(" ");
-    console.log(`Max token length: ${maxLength}, truncating...`);
-
-    // Add words until the token limit is reached
-    for (let i = 0; i < words.length; i++) {
-      let tempText = truncatedText + (i > 0 ? " " : "") + words[i];
-      let currentTokenCount = await countTokens(tempText);
-      console.log(`Checking word: ${words[i]}, current token count: ${currentTokenCount}`);
-
-      if (currentTokenCount > maxLength) {
-        console.log(`Reached max token count with: ${tempText}`);
-        break;
-      }
-
-      truncatedText = tempText;
+  if (await countTokens(text) <= maxLength)
+  {
+    return text
+  }
+  let words = text.split(" ")
+  let tokenCount = 0
+  let truncatedWords = []
+  for (let i = 0; i < words.length; i++) {
+    const element = words[i];
+    const tokens = await countTokens(element)
+    if ((tokenCount + tokens) <= maxLength){
+      tokenCount = tokenCount + tokens
+      truncatedWords.push(element)
+    } else{
+      break;
     }
-
-    console.log(`Final truncated text: ${truncatedText}`);
-    return truncatedText;
   }
-
-  // If the token count is within the limit, return the full text
-  console.log(`Returning full text: ${text}`);
-  return text;
+  return truncatedWords.join(" ")
 }
 
 
