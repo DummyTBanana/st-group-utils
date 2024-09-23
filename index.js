@@ -9,6 +9,7 @@ import { MacrosParser } from '../../../macros.js';
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced, characters, setExtensionPrompt, saveCharacterDebounced } from "../../../../script.js";
 import { getTokenCountAsync } from "../../../../scripts/tokenizers.js";
+import { SlashCommandClosure } from "../../../../scripts/slash-commands/SlashCommandClosure.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-extension-group-character-note";
@@ -234,6 +235,8 @@ jQuery(async () => {
   $("#group_note_pole").on("input",function (event) {
     const value = $(event.target).val();
     const character = getCurrentCharacter();
+    if (character == null)
+      return;
     character["groupSystemNote"] = value
     updateCharacter(character)
   })
