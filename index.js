@@ -122,10 +122,13 @@ function rearrangeChat(chat){
             });
           }
         } 
-        const note = extension_settings[extensionName]['character_data'][character.name] || "";
-        if (note !== undefined && note !== null) {
-          console.log(`Adding ${character.name}'s Group Note`)
-          system_notes.push(note.toString().replaceAll("{{char}}",character.name));
+        if (extension_settings[extensionName]['character_data'] == undefined || extension_settings[extensionName]['character_data'] == null)
+        {
+          const note = extension_settings[extensionName]['character_data'][character.name];
+          if (note != undefined && note != null) {
+            console.log(`Adding ${character.name}'s Group Note`)
+            system_notes.push(note.toString().replaceAll("{{char}}",character.name));
+          }
         }
       }
     }
