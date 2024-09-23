@@ -130,10 +130,9 @@ async function rearrangeChat(chat = [any]) {
       if (character && character.name != generating_name) {
         if (character.description.length > 0 && character.personality.length > 0) {
           const desc = await getText(character.description);
-          const pers = await getText(character.personality);
           console.log(`Adding ${character.name}'s Details`);
           character_description.push(
-            `[System Note: ${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`
+            `[System Note: ${desc.replaceAll("{{char}}", character.name)}]`
           );
         }
       }
