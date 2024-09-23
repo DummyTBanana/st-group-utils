@@ -142,7 +142,8 @@ function rearrangeChat(chat){
                 });
               });
             }
-          } else if (character){
+          }
+          if (character){
             console.log(character)
             console.log(character.name)
             const newCharacter = getCharacterByName(character.name);
