@@ -23,8 +23,25 @@ function countTokens(text){
 }
 
 function updateCharacter(character_data){
-  saveCharacterDebounced();
-  console.log(characters)
+  for (let i = 0; i < characters.length; i++) {
+    const element = characters[i];
+    if (element.name == character_data.name){
+      characters[i] = character_data
+      saveCharacterDebounced();
+      break;
+    }
+  }
+}
+function getCurrentCharacter(){
+  const context = getContext()
+  console.log(context)
+  // for (let i = 0; i < characters.length; i++) {
+  //   const element = characters[i];
+  //   if (element.name == name){
+  //     return element
+  //   }
+  // }
+  // return null;
 }
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -212,7 +229,7 @@ jQuery(async () => {
   });
   $("#group_note_pole").on("input",function (event) {
     const value = $(event.target).val();
-    updateCharacter(null)
+    const character = getCurrentCharacter();
   })
 
   loadSettings();
