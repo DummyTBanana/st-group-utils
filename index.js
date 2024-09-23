@@ -92,7 +92,24 @@ async function getText(text) {
       break;
     }
   }
-  return truncatedWords.join(" ")
+  // Step 5: Join the truncated words back into a string
+  let truncatedText = truncatedWords.join(" ");
+
+  // Step 6: Find the last occurrence of punctuation (.,;,?)
+  let lastPunctuationIndex = Math.max(
+    truncatedText.lastIndexOf('.'),
+    truncatedText.lastIndexOf(','),
+    truncatedText.lastIndexOf(';'),
+    truncatedText.lastIndexOf('?')
+  );
+
+  // Step 7: If there's punctuation, trim the text to that point and replace the punctuation with a period (.)
+  if (lastPunctuationIndex > -1) {
+    truncatedText = truncatedText.slice(0, lastPunctuationIndex + 1).replace(/[,;?]$/, '.');
+  }
+
+  // Return the final truncated text
+  return truncatedText;
 }
 
 
