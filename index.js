@@ -134,19 +134,26 @@ function rearrangeChat(chat){
         for (let i = 0; i < maxCharacters; i++) {
           const character = char_list[i];
           if (character && context.name2 != character.name){
-            console.log(character.note)
-            const newCharacter = getCharacterByName(character.name)
-            console.log(getNote(newCharacter))
-            const note = getNote(newCharacter)
-            if (note != undefined && note != null){
-              notes.push(note)
-            }
-            if (character.description.length > 0 && character.personality.length > 0){
-              getText(character.description).then((desc)=>{
-                getText(character.personality).then((pers)=>{
-                  notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}",character.name)} and their personality is: ${pers.replaceAll("{{char}}",character.name)}]`)
-                })
-              })
+            const newCharacter = getCharacterByName(character.name);
+            
+            if (newCharacter) {
+                const characterText = newCharacter.name;  // This is the correct character name
+        
+                // Retrieve the note associated with this character
+                const note = extension_settings[extensionName]['character_data'][characterText] || "";
+        
+                if (note !== undefined && note !== null) {
+                    notes.push(note);  // Push the note if it exists
+                }
+                
+                // Ensure that description and personality are added as well
+                if (character.description.length > 0 && character.personality.length > 0) {
+                    getText(character.description).then((desc) => {
+                        getText(character.personality).then((pers) => {
+                            notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}", character.name)} and their personality is: ${pers.replaceAll("{{char}}", character.name)}]`);
+                        });
+                    });
+                }
             }
           }
         }
