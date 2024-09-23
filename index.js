@@ -193,10 +193,11 @@ jQuery(async () => {
     return characters.map(obj => obj.name).join(', ');
   })
 
+  const note_visual_insert_depth = 10
   const group_note_element = await $.get(`${extensionFolderPath}/group_note.html`)
   const container = $('#character_popup');
-  if (container.children().length >= 5) {
-    container.children().eq(4).after(group_note_element);
+  if (container.children().length >= note_visual_insert_depth) {
+    container.children().eq(note_visual_insert_depth-1).after(group_note_element);
   }
 
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
