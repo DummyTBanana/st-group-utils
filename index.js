@@ -8,6 +8,7 @@ import { MacrosParser } from '../../../macros.js';
 
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced,characters, setExtensionPrompt,MAX_INJECTION_DEPTH } from "../../../../script.js";
+import { getTokenCountAsync } from "../../../../scripts/tokenizers.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-extension-group-character-note";
@@ -16,10 +17,9 @@ const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
 const defaultSettings = {};
 
-
-
-function getPhraseTester(){
-  return new RegExp(`.{0,${extension_settings[extensionName].max_share_length}}?(?=(\\${extension_settings[extensionName].share_stopper}|$))`);
+function countTokens(text){
+  if (text instanceof SlashCommandClosure || Array.isArray(text)) throw new Error('Unnamed argument cannot be a closure for command /tokens');
+  return getTokenCountAsync(text).then(count => String(count));
 }
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -54,14 +54,37 @@ function getCharacter(characterPNG)
   return null
 }
 
-function getText(text){
-  const phraseTester = getPhraseTester()
-  let t = phraseTester.exec(text)[0]
-  if (t[t.length-1] == ".")
-  {return t}
-  else if (t[t.length-1] == ",")
-  {return t.replace(/(,$)/, '.');}
-  else{return t+"."}
+async function getText(text=String){
+  let stopper = extension_settings[extensionName].share_stopper;
+  let maxLength = extension_settings[extensionName].max_share_length;
+
+  // Check if the stopper exists in the text
+  if (new RegExp(".+\\" + stopper).test(text)) {
+    // Return text up to the stopper
+    return text.split(stopper)[0];
+  } else {
+    // Get the token count of the text
+    let tokenCount = await countTokens(text);
+
+    // If the token count exceeds the max length, truncate the text
+    if (tokenCount > maxLength) {
+      let truncatedText = "";
+
+      // Keep adding words until the token limit is reached
+      let words = text.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        let tempText = truncatedText + (i > 0 ? " " : "") + words[i];
+        let currentTokenCount = await countTokens(tempText);
+        if (currentTokenCount > maxLength) break;
+        truncatedText = tempText;
+      }
+
+      return truncatedText;
+    }
+
+    // If the token count is within the limit, return the full text
+    return text;
+  }
 }
 
 function CreateSystemNote(text) {
@@ -95,9 +118,11 @@ function rearrangeChat(chat){
           const character = char_list[i];
           if (character && context.name2 != character.name){
             if (character.description.length > 0 && character.personality.length > 0){
-              const desc = getText(character.description).replaceAll("{{char}}",character.name)
-              const person = getText(character.personality).replaceAll("{{char}}",character.name)
-              notes.push(`[System Note: ${character.name} description is: ${desc} and their personality is: ${person}]`)
+              getText(character.description).then((desc)=>{
+                getText(character.personality).then((pers)=>{
+                  notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}",character.name)} and their personality is: ${pers.replaceAll("{{char}}",character.name)}]`)
+                })
+              })
             }
           }
         }
@@ -146,7 +171,8 @@ jQuery(async () => {
     return characters.map(obj => obj.name).join(', ');
   })
 
-
+  const group_note_element = await $.get(`${extensionFolderPath}/group_note.html`)
+  $("#character_popup").prepend(group_note_element)
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
   $("#extensions_settings2").append(settingsHtml);
   $("#share_character_info").on("input", function(event){
