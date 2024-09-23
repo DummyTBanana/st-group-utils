@@ -171,7 +171,7 @@ async function rearrangeChat(chat = [any]) {
         "send_date": new Date(Date.now()).toString(),
         "mes": pair.join("\n"),
       };
-      chat.splice(settings.depth, 0, systemNote);
+      chat.splice(chat.length - settings.depth, 0, systemNote);
       console.log("Chat Modified!", chat);
     } else {
       console.warn("No custom data to import!");
