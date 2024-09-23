@@ -100,6 +100,7 @@ async function getText(text=String){
 
 
 function rearrangeChat(chat){
+  setExtensionPrompt(EXTENSION_PROMPT_KEY,'',1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
   try{
     const context = getContext()
     const group = getGroup(context.groupId)
@@ -113,10 +114,10 @@ function rearrangeChat(chat){
       const character = getCharacterByName(element.split(".png")[0])
       if (character){
         if (character.name != generating_name){
-          console.log(`Adding ${character.name}'s Details`)
           if (character.description.length > 0 && character.personality.length > 0) {
             getText(character.description).then((desc) => {
               getText(character.personality).then((pers) => {
+                console.log(`Adding ${character.name}'s Details`)
                 character_description.push(`${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}`);
               });
             });
