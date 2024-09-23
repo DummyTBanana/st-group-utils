@@ -32,18 +32,6 @@ function getCharacterByName(name){
   }
   return null;
 }
-
-function getCurrentCharacter(){
-  const context = getContext()
-  const name = context.name2
-  for (let i = 0; i < characters.length; i++) {
-    const element = characters[i];
-    if (element.name == name){
-      return element
-    }
-  }
-  return null;
-}
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
 async function loadSettings() {
@@ -146,6 +134,8 @@ function rearrangeChat(chat){
         for (let i = 0; i < maxCharacters; i++) {
           const character = char_list[i];
           if (character && context.name2 != character.name){
+            console.log(character.note)
+            console.log(getNote(newCharacter))
             const newCharacter = getCharacterByName(character.name)
             const note = getNote(newCharacter)
             if (note != undefined && note != null){
