@@ -135,8 +135,8 @@ function rearrangeChat(chat){
           const character = char_list[i];
           if (character && context.name2 != character.name){
             console.log(character.note)
-            console.log(getNote(newCharacter))
             const newCharacter = getCharacterByName(character.name)
+            console.log(getNote(newCharacter))
             const note = getNote(newCharacter)
             if (note != undefined && note != null){
               notes.push(note)
