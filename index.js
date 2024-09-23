@@ -23,16 +23,16 @@ function countTokens(text){
   return getTokenCountAsync(text).then(count => String(count));
 }
 
-function updateCharacter(character_data){
+function getCharacterByName(name){
   for (let i = 0; i < characters.length; i++) {
     const element = characters[i];
-    if (element.name == character_data.name){
-      characters[i] = character_data
-      saveCharacterDebounced();
-      break;
+    if (element.name == name){
+      return element
     }
   }
+  return null;
 }
+
 function getCurrentCharacter(){
   const context = getContext()
   const name = context.name2
@@ -66,6 +66,12 @@ function getGroup(groupId){
     return;
   }
   return group
+}
+function getNote(character){
+  if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
+    extension_settings[extensionName]['character_data'] = {}
+  }
+  return extension_settings[extensionName]['character_data'][character.name]
 }
 
 function getCharacter(characterPNG)
@@ -140,9 +146,10 @@ function rearrangeChat(chat){
         for (let i = 0; i < maxCharacters; i++) {
           const character = char_list[i];
           if (character && context.name2 != character.name){
-            console.log(character)
-            if (typeof(character["groupSystemNote"]) == "string"){
-              notes.push(character["groupSystemNote"])
+            const newCharacter = getCharacterByName(character.name)
+            const note = getNote(newCharacter)
+            console.log(note)
+            if (note != undefined && note != null){
             }
             if (character.description.length > 0 && character.personality.length > 0){
               getText(character.description).then((desc)=>{
@@ -237,8 +244,11 @@ jQuery(async () => {
     const character = getCurrentCharacter();
     if (character == null)
       return;
-    character["groupSystemNote"] = value
-    updateCharacter(character)
+    if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
+      extension_settings[extensionName]['character_data'] = {}
+    }
+    extension_settings[extensionName]['character_data'][character.name] = value
+    saveSettingsDebounced();
   })
 
   loadSettings();
