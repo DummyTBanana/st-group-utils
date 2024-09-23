@@ -144,16 +144,11 @@ function rearrangeChat(chat){
             }
           }
           if (character){
-            console.log(character)
-            console.log(character.name)
             const newCharacter = getCharacterByName(character.name);
             if (newCharacter) {
-                // Retrieve the note associated with this character
                 const note = extension_settings[extensionName]['character_data'][character.name] || "";
-        
                 if (note !== undefined && note !== null) {
-                    notes.push(note);  // Push the note if it exists
-                    console.log(note)
+                  notes.push(note.toString());
                 }
               }
           }
