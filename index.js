@@ -100,63 +100,73 @@ async function getText(text=String){
 }
 
 
-async function rearrangeChat(chat=[any]){
-  try{
-    const context = getContext()
-    const group = getGroup(context.groupId)
-    const generating_name = context.name2
+async function rearrangeChat(chat = [any]) {
+  try {
+    const context = getContext();
+    const group = getGroup(context.groupId);
+    const generating_name = context.name2;
     if (!group) return;
     if (!extension_settings[extensionName].share_character_info) return;
-    let system_notes = []
-    let character_description = []
-    for (let i = 0; i < group.members.length; i++) {
-      const element = group.members[i];
-      const character = getCharacterByName(element.split(".png")[0])
-      if (character){
-        if (character.name != generating_name){
-          if (character.description.length > 0 && character.personality.length > 0) {
-            getText(character.description).then((desc) => {
-              getText(character.personality).then((pers) => {
-                console.log(`Adding ${character.name}'s Details`)
-                character_description.push(`[System Note: ${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`);
-              });
-            });
-          }
-        } 
-        if (extension_settings[extensionName]['character_data'] != undefined && extension_settings[extensionName]['character_data'] != null)
-        {
+
+    let system_notes = [];
+    let character_description = [];
+
+    // Create an array of promises for getting character descriptions and personalities
+    const descriptionPromises = group.members.map(async (element) => {
+      const character = getCharacterByName(element.split(".png")[0]);
+      if (character && character.name != generating_name) {
+        if (character.description.length > 0 && character.personality.length > 0) {
+          const desc = await getText(character.description);
+          const pers = await getText(character.personality);
+          console.log(`Adding ${character.name}'s Details`);
+          character_description.push(
+            `[System Note: ${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`
+          );
+        }
+      }
+      return character;
+    });
+
+    // Wait for all description promises to resolve
+    await Promise.all(descriptionPromises);
+
+    // Process character notes
+    for (const element of group.members) {
+      const character = getCharacterByName(element.split(".png")[0]);
+      if (character) {
+        if (extension_settings[extensionName]['character_data'] != undefined && extension_settings[extensionName]['character_data'] != null) {
           const note = extension_settings[extensionName]['character_data'][character.name];
           if (note != undefined && note != null) {
-            console.log(`Adding ${character.name}'s Group Note`)
-            system_notes.push(note.toString().replaceAll("{{char}}",character.name));
+            console.log(`Adding ${character.name}'s Group Note`);
+            system_notes.push(note.toString().replaceAll("{{char}}", character.name));
           }
         }
       }
     }
-    let pair = []
-    if (character_description.length > 0)
-    {pair.push(character_description.join("\n"))}
-    if (system_notes.length > 0)
-    {pair.push(system_notes.join("\n"))}
-    if (pair.length > 0){
+
+    let pair = [];
+    if (character_description.length > 0) {
+      pair.push(character_description.join("\n"));
+    }
+    if (system_notes.length > 0) {
+      pair.push(system_notes.join("\n"));
+    }
+    if (pair.length > 0) {
       const systemNote = {
         "name": "System",
         "is_user": false,
         "is_system": "",
         "send_date": new Date(Date.now()).toString(),
         "mes": pair.join("\n"),
-      }
-      chat.splice(settings.depth,0,systemNote)
-      console.log("Chat Modified!",chat)
+      };
+      chat.splice(settings.depth, 0, systemNote);
+      console.log("Chat Modified!", chat);
     } else {
-      console.warn("No custom data to import!")
+      console.warn("No custom data to import!");
     }
-  }catch(e){
-    console.log(e)
-    toastr.error(
-      e,
-      'An Error Occured!'
-    )
+  } catch (e) {
+    console.log(e);
+    toastr.error(e, 'An Error Occurred!');
   }
 }
 
