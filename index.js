@@ -116,7 +116,7 @@ function rearrangeChat(chat){
           if (character.description.length > 0 && character.personality.length > 0) {
             getText(character.description).then((desc) => {
               getText(character.personality).then((pers) => {
-                character_description.push(`${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`);
+                character_description.push(`[System Note: ${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`);
               });
             });
           }
@@ -128,7 +128,7 @@ function rearrangeChat(chat){
         }
       }
     }
-    setExtensionPrompt(EXTENSION_PROMPT_KEY+"_character_data",character_description.join("\n"),0,MAX_INJECTION_DEPTH - 1,extension_settings[extensionName].include_worldinfo)
+    setExtensionPrompt(EXTENSION_PROMPT_KEY+"_character_data",character_description.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
     setExtensionPrompt(EXTENSION_PROMPT_KEY,system_notes.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
   }catch(e){
     toastr.error(
