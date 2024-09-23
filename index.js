@@ -169,8 +169,10 @@ jQuery(async () => {
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList' || mutation.type === 'characterData') {
         const character_text = $(mutation.target).text();
-        const newValue = extension_settings[extensionName]['character_data'][character_text] || "";
-        $('#group_note_pole').val(newValue);
+        try{
+          const newValue = extension_settings[extensionName]['character_data'][character_text] || "";
+          $('#group_note_pole').val(newValue);
+        }catch{}
       }
     }
   });
