@@ -148,7 +148,7 @@ function rearrangeChat(chat){
             if (newCharacter) {
                 const note = extension_settings[extensionName]['character_data'][character.name] || "";
                 if (note !== undefined && note !== null) {
-                  notes.push(note.toString());
+                  notes.push(note.toString().replaceAll("{{char}}",character.name));
                 }
               }
           }
