@@ -134,7 +134,14 @@ async function rearrangeChat(chat=[any]){
       }
     }
     console.log(chat)
-    chat.splice(settings.depth,0,character_description.join("\n")+"\n"+system_notes.join("\n"))
+    const systemNote = {
+      "name": "System",
+      "is_user": false,
+      "is_system": "",
+      "send_date": new Date(Date.now()).toString(),
+      "mes": character_description.join("\n")+"\n"+system_notes.join("\n"),
+    }
+    chat.splice(settings.depth,0,systemNote)
     console.log(chat)
   }catch(e){
     console.log(e)
