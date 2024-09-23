@@ -7,7 +7,7 @@ import { groups } from "../../group-chats.js";
 import { MacrosParser } from '../../macros.js';
 
 //You'll likely need to import some other functions from the main script
-import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "../../../script.js";
+import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "script.js";
 import { getTokenCountAsync } from "../../../scripts/tokenizers.js";
 import { SlashCommandClosure } from "../../../scripts/slash-commands/SlashCommandClosure.js";
 
