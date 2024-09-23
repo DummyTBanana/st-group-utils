@@ -55,12 +55,6 @@ function getGroup(groupId){
   }
   return group
 }
-function getNote(character){
-  if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
-    extension_settings[extensionName]['character_data'] = {}
-  }
-  return extension_settings[extensionName]['character_data'][character.name]
-}
 
 function getCharacter(characterPNG)
 {
@@ -104,16 +98,6 @@ async function getText(text=String){
   }
 }
 
-function CreateSystemNote(text) {
-  return {
-    "name": "System",
-    "is_user": false,
-    "is_system": true, 
-    "send_date": new Date().toISOString(),
-    "mes": text,
-    "index": chat.length
-  };
-}
 
 function rearrangeChat(chat){
   try{
@@ -153,8 +137,7 @@ function rearrangeChat(chat){
               }
           }
         }
-        const systemNote = CreateSystemNote(notes.join("\n"))
-        setExtensionPrompt(EXTENSION_PROMPT_KEY,systemNote,1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
+        setExtensionPrompt(EXTENSION_PROMPT_KEY,notes.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
       }
     }
   }catch(e){
