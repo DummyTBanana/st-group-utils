@@ -249,7 +249,6 @@ jQuery(async () => {
       extension_settings[extensionName]['character_data'] = {}
     }
     extension_settings[extensionName]['character_data'][character.name] = value
-    console.log(extension_settings[extensionName])
     saveSettingsDebounced();
   })
 
