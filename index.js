@@ -34,14 +34,14 @@ function updateCharacter(character_data){
 }
 function getCurrentCharacter(){
   const context = getContext()
-  console.log(context)
-  // for (let i = 0; i < characters.length; i++) {
-  //   const element = characters[i];
-  //   if (element.name == name){
-  //     return element
-  //   }
-  // }
-  // return null;
+  const name = context.name2
+  for (let i = 0; i < characters.length; i++) {
+    const element = characters[i];
+    if (element.name == name){
+      return element
+    }
+  }
+  return null;
 }
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -230,6 +230,8 @@ jQuery(async () => {
   $("#group_note_pole").on("input",function (event) {
     const value = $(event.target).val();
     const character = getCurrentCharacter();
+    character["groupSystemNote"] = value
+    updateCharacter(character)
   })
 
   loadSettings();
