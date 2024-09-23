@@ -100,7 +100,7 @@ async function getText(text=String){
 }
 
 
-async function rearrangeChat(chat){
+async function rearrangeChat(chat=[any]){
   try{
     const context = getContext()
     const group = getGroup(context.groupId)
@@ -118,7 +118,7 @@ async function rearrangeChat(chat){
             getText(character.description).then((desc) => {
               getText(character.personality).then((pers) => {
                 console.log(`Adding ${character.name}'s Details`)
-                character_description.push(`${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}`);
+                character_description.push(`[System Note: ${desc.replaceAll("{{char}}", character.name)}\n${character.name}'s Personality: ${pers.replaceAll("{{char}}", character.name)}]`);
               });
             });
           }
@@ -133,7 +133,7 @@ async function rearrangeChat(chat){
         }
       }
     }
-    console.log(chat)
+    chat.splice(settings.depth,0,character_description.join("\n")+"\n"+system_notes.join("\n"))
   }catch(e){
     console.log(e)
     toastr.error(
