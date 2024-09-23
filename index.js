@@ -122,7 +122,7 @@ function rearrangeChat(chat){
             });
           }
         } 
-        if (extension_settings[extensionName]['character_data'] == undefined || extension_settings[extensionName]['character_data'] == null)
+        if (extension_settings[extensionName]['character_data'] != undefined && extension_settings[extensionName]['character_data'] != null)
         {
           const note = extension_settings[extensionName]['character_data'][character.name];
           if (note != undefined && note != null) {
