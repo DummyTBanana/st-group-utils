@@ -10,7 +10,6 @@ const extensionName = "st-group-utils";
 const EXTENSION_PROMPT_KEY = "ub_grouputils"
 const EXTENSION_PROMPT_KEY_CHAR = "ub_grouputils_char"
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
-const extensionSettings = extension_settings[extensionName];
 const settings = {
   char_position: 0,
   position: 1,
@@ -103,8 +102,6 @@ async function getText(text=String){
 
 async function rearrangeChat(chat){
   try{
-    setExtensionPrompt(EXTENSION_PROMPT_KEY, '', settings.position, settings.depth, settings.include_wi);
-    setExtensionPrompt(EXTENSION_PROMPT_KEY_CHAR, '', settings.char_position, settings.depth, settings.include_wi);
     const context = getContext()
     const group = getGroup(context.groupId)
     const generating_name = context.name2
@@ -136,8 +133,7 @@ async function rearrangeChat(chat){
         }
       }
     }
-    setExtensionPrompt(EXTENSION_PROMPT_KEY, system_notes.join("\n"), settings.position, settings.depth, settings.include_wi);
-    setExtensionPrompt(EXTENSION_PROMPT_KEY_CHAR, character_description.join("\n"), settings.char_position, settings.depth, settings.include_wi);
+    console.log(chat)
   }catch(e){
     console.log(e)
     toastr.error(
