@@ -7,7 +7,7 @@ import { groups } from "../../../group-chats.js";
 import { MacrosParser } from '../../../macros.js';
 
 //You'll likely need to import some other functions from the main script
-import { saveSettingsDebounced,characters, setExtensionPrompt,MAX_INJECTION_DEPTH } from "../../../../script.js";
+import { saveSettingsDebounced, characters, setExtensionPrompt, saveCharacterDebounced } from "../../../../script.js";
 import { getTokenCountAsync } from "../../../../scripts/tokenizers.js";
 
 // Keep track of where your extension is located, name should match repo name
@@ -20,6 +20,11 @@ const defaultSettings = {};
 function countTokens(text){
   if (text instanceof SlashCommandClosure || Array.isArray(text)) throw new Error('Unnamed argument cannot be a closure for command /tokens');
   return getTokenCountAsync(text).then(count => String(count));
+}
+
+function updateCharacter(character_data){
+  saveCharacterDebounced();
+  console.log(characters)
 }
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -205,6 +210,10 @@ jQuery(async () => {
     extension_settings[extensionName].max_characters = value;
     saveSettingsDebounced();
   });
+  $("#group_note_pole").on("input",function (event) {
+    const value = $(event.target).val();
+    updateCharacter(null)
+  })
 
   loadSettings();
 });
