@@ -148,8 +148,8 @@ function rearrangeChat(chat){
           if (character && context.name2 != character.name){
             const newCharacter = getCharacterByName(character.name)
             const note = getNote(newCharacter)
-            console.log(note)
             if (note != undefined && note != null){
+              notes.push(note)
             }
             if (character.description.length > 0 && character.personality.length > 0){
               getText(character.description).then((desc)=>{
@@ -253,4 +253,26 @@ jQuery(async () => {
   })
 
   loadSettings();
+});
+$(document).ready(function() {
+  // Select the target h3 element
+  const target = $('h3')[0]; // Select the first h3 or you can be more specific with a class or id
+
+  // Create a mutation observer instance
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+      if (mutation.type === 'childList' || mutation.type === 'characterData') {
+        if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
+          extension_settings[extensionName]['character_data'] = {}
+        }
+        $(mutation.target).text(extension_settings[extensionName]['character_data'][character.name] || "")
+      }
+    }
+  });
+
+  // Configuration for the observer (watch for text changes)
+  const config = { characterData: true, childList: true, subtree: true };
+
+  // Start observing the target element
+  observer.observe(target, config);
 });
