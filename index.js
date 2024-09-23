@@ -134,6 +134,15 @@ function rearrangeChat(chat){
         for (let i = 0; i < maxCharacters; i++) {
           const character = char_list[i];
           if (character && context.name2 != character.name){
+            // Ensure that description and personality are added as well
+            if (character.description.length > 0 && character.personality.length > 0) {
+              getText(character.description).then((desc) => {
+                getText(character.personality).then((pers) => {
+                  notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}", character.name)} and their personality is: ${pers.replaceAll("{{char}}", character.name)}]`);
+                });
+              });
+            }
+          } else if (character){
             console.log(character)
             console.log(character.name)
             const newCharacter = getCharacterByName(character.name);
@@ -145,14 +154,6 @@ function rearrangeChat(chat){
                     notes.push(note);  // Push the note if it exists
                     console.log(note)
                 }
-              }
-              // Ensure that description and personality are added as well
-              if (character.description.length > 0 && character.personality.length > 0) {
-                  getText(character.description).then((desc) => {
-                      getText(character.personality).then((pers) => {
-                          notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}", character.name)} and their personality is: ${pers.replaceAll("{{char}}", character.name)}]`);
-                      });
-                  });
               }
           }
         }
