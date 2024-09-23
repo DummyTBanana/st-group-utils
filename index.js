@@ -1,9 +1,9 @@
-import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "script.js";
-import { extension_settings, getContext } from "./scripts/extensions.js";
-import { groups } from "./scripts/group-chats.js";
-import { MacrosParser } from './scripts/macros.js';
-import { getTokenCountAsync } from "./scripts/tokenizers.js";
-import { SlashCommandClosure } from "./scripts/slash-commands/SlashCommandClosure.js";
+import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "../../../../script.js";
+import { extension_settings, getContext } from "../../../extensions.js";
+import { groups } from "../../../group-chats.js";
+import { MacrosParser } from '../../../macros.js';
+import { getTokenCountAsync } from "../../../tokenizers.js";
+import { SlashCommandClosure } from "../../../slash-commands/SlashCommandClosure.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-group-utils";
