@@ -83,7 +83,7 @@ async function getText(text) {
   let truncatedWords = []
   for (let i = 0; i < words.length; i++) {
     const element = words[i];
-    const tokens = await countTokens(element)
+    const tokens = parseFloat(await countTokens(element))
     if ((tokenCount + tokens) <= maxLength){
       tokenCount = tokenCount + tokens
       console.log(`Adding Word ${element}: Token Count = ${tokens}; Total Tokens = ${tokenCount}`)
