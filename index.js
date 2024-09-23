@@ -139,6 +139,10 @@ function rearrangeChat(chat){
         for (let i = 0; i < maxCharacters; i++) {
           const character = char_list[i];
           if (character && context.name2 != character.name){
+            console.log(character)
+            if (typeof(character["groupSystemNote"]) == "string"){
+              notes.push(character["groupSystemNote"])
+            }
             if (character.description.length > 0 && character.personality.length > 0){
               getText(character.description).then((desc)=>{
                 getText(character.personality).then((pers)=>{
