@@ -133,7 +133,9 @@ async function rearrangeChat(chat=[any]){
         }
       }
     }
+    console.log(chat)
     chat.splice(settings.depth,0,character_description.join("\n")+"\n"+system_notes.join("\n"))
+    console.log(chat)
   }catch(e){
     console.log(e)
     toastr.error(
