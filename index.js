@@ -132,7 +132,7 @@ async function rearrangeChat(chat = [any]) {
           const desc = await getText(character.description);
           console.log(`Adding ${character.name}'s Details`);
           character_description.push(
-            `[System Note: ${desc.replaceAll("{{char}}", character.name)}]`
+            `[System Note: ${desc.replaceAll("{{char}}", character.name).replaceAll(":",",")}]`
           );
         }
       }
@@ -150,7 +150,7 @@ async function rearrangeChat(chat = [any]) {
           const note = extension_settings[extensionName]['character_data'][character.name];
           if (note != undefined && note != null) {
             console.log(`Adding ${character.name}'s Group Note`);
-            system_notes.push(note.toString().replaceAll("{{char}}", character.name));
+            system_notes.push(note.toString().replaceAll("{{char}}", character.name).replaceAll(":",","));
           }
         }
       }
