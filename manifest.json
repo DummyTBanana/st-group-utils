@@ -8,5 +8,5 @@
     "generate_interceptor": "gchar_genIntercept",
     "author": "Ubunifu",
     "version": "1.0.0",
-    "homePage": "https://github.com/DummyTBanana/st-extension-group-character-note"
+    "homePage": "https://github.com/DummyTBanana/st-group-utils"
 }

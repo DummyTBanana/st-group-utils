@@ -12,7 +12,7 @@ import { getTokenCountAsync } from "../../../../scripts/tokenizers.js";
 import { SlashCommandClosure } from "../../../../scripts/slash-commands/SlashCommandClosure.js";
 
 // Keep track of where your extension is located, name should match repo name
-const extensionName = "st-extension-group-character-note";
+const extensionName = "st-group-utils";
 const EXTENSION_PROMPT_KEY = "ub_grouputils"
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
