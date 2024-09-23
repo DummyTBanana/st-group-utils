@@ -241,7 +241,8 @@ jQuery(async () => {
   });
   $("#group_note_pole").on("input",function (event) {
     const value = $(event.target).val();
-    const character = getCurrentCharacter();
+    const character_text = $("#character_popup-button-h3").text()
+    const character = getCharacterByName(character_text);
     if (character == null)
       return;
     if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
