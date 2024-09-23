@@ -195,9 +195,7 @@ jQuery(async () => {
   }
 
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
-  if ($("#group_utils_panel") == undefined)
-    $("#extensions_settings2").append(settingsHtml);
-  loadSettings();
+  $("#extensions_settings2").append(settingsHtml);
   
   $("#share_character_info").on("input", function(event){
     const value = Boolean($(event.target).prop("checked"));
@@ -241,4 +239,5 @@ jQuery(async () => {
     extension_settings[extensionName]['character_data'][character.name] = value
     saveSettingsDebounced();
   })
+  loadSettings();
 });
