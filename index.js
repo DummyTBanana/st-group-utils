@@ -104,16 +104,15 @@ function rearrangeChat(chat){
     const context = getContext()
     const group = getGroup(context.groupId)
     if (!group) return;
+    if (!extension_settings[extensionName].share_character_info) return;
     let char_list = []
+    console.log(context)
     for (let i = 0; i < group.members.length; i++) {
       const element = group.members[i];
       const character = getCharacterByName(element.split(".png")[0])
       if (character){
-        char_list.push(character)
+
       }
-    }
-    console.log(char_list)
-    if (extension_settings[extensionName].share_character_info) {
     }
   }catch(e){
     toastr.error(
