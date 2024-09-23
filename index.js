@@ -1,15 +1,9 @@
-// The main script for the extension
-// The following are examples of some basic extension functionality
-
-//You'll likely need to import extension_settings, getContext, and loadExtensionSettings from extensions.js
-import { extension_settings, getContext } from "scripts/extensions.js";
-import { groups } from "scripts/group-chats.js";
-import { MacrosParser } from 'scripts/macros.js';
-
-//You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced, characters, setExtensionPrompt, MAX_INJECTION_DEPTH } from "script.js";
-import { getTokenCountAsync } from "scripts/tokenizers.js";
-import { SlashCommandClosure } from "scripts/slash-commands/SlashCommandClosure.js";
+import { extension_settings, getContext } from "./scripts/extensions.js";
+import { groups } from "./scripts/group-chats.js";
+import { MacrosParser } from './scripts/macros.js';
+import { getTokenCountAsync } from "./scripts/tokenizers.js";
+import { SlashCommandClosure } from "./scripts/slash-commands/SlashCommandClosure.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-group-utils";
