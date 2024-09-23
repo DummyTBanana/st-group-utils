@@ -194,7 +194,11 @@ jQuery(async () => {
   })
 
   const group_note_element = await $.get(`${extensionFolderPath}/group_note.html`)
-  $("#character_popup").prepend(group_note_element)
+  const container = $('#character_popup');
+  if (container.children().length >= 5) {
+    container.children().eq(4).after(group_note_element);
+  }
+
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
   $("#extensions_settings2").append(settingsHtml);
   $("#share_character_info").on("input", function(event){
