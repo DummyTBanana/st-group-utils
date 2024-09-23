@@ -103,6 +103,8 @@ function rearrangeChat(chat){
   try{
     const context = getContext()
     const group = getGroup(context.groupId)
+    if (!group) return;
+    console.log(group)
     let char_list = []
     for (let i = 0; i < group.members.length; i++) {
       const element = group.members[i];
@@ -112,33 +114,6 @@ function rearrangeChat(chat){
       }
     }
     if (extension_settings[extensionName].share_character_info) {
-      if (group){
-        var notes = []
-        let maxCharacters = Math.min(char_list.length,extension_settings[extensionName].max_characters == -1 && char_list.length || extension_settings[extensionName].max_characters)
-        for (let i = 0; i < maxCharacters; i++) {
-          const character = char_list[i];
-          if (character && context.name2 != character.name){
-            // Ensure that description and personality are added as well
-            if (character.description.length > 0 && character.personality.length > 0) {
-              getText(character.description).then((desc) => {
-                getText(character.personality).then((pers) => {
-                  notes.push(`[System Note: ${character.name} description is: ${desc.replaceAll("{{char}}", character.name)} and their personality is: ${pers.replaceAll("{{char}}", character.name)}]`);
-                });
-              });
-            }
-          }
-          if (character){
-            const newCharacter = getCharacterByName(character.name);
-            if (newCharacter) {
-                const note = extension_settings[extensionName]['character_data'][character.name] || "";
-                if (note !== undefined && note !== null) {
-                  notes.push(note.toString().replaceAll("{{char}}",character.name));
-                }
-              }
-          }
-        }
-        setExtensionPrompt(EXTENSION_PROMPT_KEY,notes.join("\n"),1,extension_settings[extensionName].text_depth,extension_settings[extensionName].include_worldinfo)
-      }
     }
   }catch(e){
     toastr.error(
