@@ -68,7 +68,7 @@ function getCharacter(characterPNG)
 
 async function getText(text=String){
   let stopper = extension_settings[extensionName].share_stopper;
-  let maxLength = extension_settings[extensionName].max_share_length;
+  let maxLength = extension_settings[extensionName].max_characters;
 
   // Check if the stopper exists in the text
   if (new RegExp(".+\\" + stopper).test(text)) {
