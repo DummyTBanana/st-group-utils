@@ -160,10 +160,9 @@ async function rearrangeChat(chat=[any]){
   }
 }
 
-window['gchar_genIntercept'] = rearrangeChat;
-
 // This function is called when the extension is loaded
 jQuery(async () => {
+  window['groupUtils_generationInterceptor'] = rearrangeChat;
   const target = $('#character_popup-button-h3')[0];
   const observer = new MutationObserver(function(mutationsList, observer) {
     for (let mutation of mutationsList) {

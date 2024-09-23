@@ -5,7 +5,7 @@
     "optional": [],
     "js": "index.js",
     "css": "style.css",
-    "generate_interceptor": "gchar_genIntercept",
+    "generate_interceptor": "groupUtils_generationInterceptor",
     "author": "Ubunifu",
     "version": "1.0.0",
     "homePage": "https://github.com/DummyTBanana/st-group-utils"
