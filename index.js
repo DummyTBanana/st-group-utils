@@ -2,7 +2,7 @@
 // The following are examples of some basic extension functionality
 
 //You'll likely need to import extension_settings, getContext, and loadExtensionSettings from extensions.js
-import { extension_settings, getContext } from "scipts/extensions.js";
+import { extension_settings, getContext } from "scripts/extensions.js";
 import { groups } from "scripts/group-chats.js";
 import { MacrosParser } from 'scripts/macros.js';
 
