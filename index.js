@@ -133,16 +133,24 @@ async function rearrangeChat(chat=[any]){
         }
       }
     }
-    console.log(chat)
-    const systemNote = {
-      "name": "System",
-      "is_user": false,
-      "is_system": "",
-      "send_date": new Date(Date.now()).toString(),
-      "mes": character_description.join("\n")+"\n"+system_notes.join("\n"),
+    let pair = []
+    if (character_description.length > 0)
+    {pair.push(character_description.join("\n"))}
+    if (system_notes.length > 0)
+    {pair.push(system_notes.join("\n"))}
+    if (pair.length > 0){
+      const systemNote = {
+        "name": "System",
+        "is_user": false,
+        "is_system": "",
+        "send_date": new Date(Date.now()).toString(),
+        "mes": pair.join("\n"),
+      }
+      chat.splice(settings.depth,0,systemNote)
+      console.log("Chat Modified!",chat)
+    } else {
+      console.warn("No custom data to import!")
     }
-    chat.splice(settings.depth,0,systemNote)
-    console.log(chat)
   }catch(e){
     console.log(e)
     toastr.error(
