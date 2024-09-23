@@ -66,37 +66,37 @@ function getCharacter(characterPNG)
   return null
 }
 
-async function getText(text=String){
-  let stopper = extension_settings[extensionName].share_stopper;
-  let maxLength = extension_settings[extensionName].max_characters;
+async function getText(text) {
+  const stopper = extension_settings[extensionName].share_stopper;
+  const maxLength = extension_settings[extensionName].max_share_length;
 
-  // Check if the stopper exists in the text
-  if (new RegExp(".+\\" + stopper).test(text)) {
-    // Return text up to the stopper
-    return text.split(stopper)[0];
-  } else {
-    // Get the token count of the text
-    let tokenCount = await countTokens(text);
+  // Step 1: Check if the stopper exists in the text and truncate it if found
+  if (text.includes(stopper)) {
+    text = text.split(stopper)[0];  // Truncate the text at the stopper
+  }
 
-    // If the token count exceeds the max length, truncate the text
-    if (tokenCount > maxLength) {
-      let truncatedText = "";
+  // Step 2: Get the token count of the current text
+  let tokenCount = await countTokens(text);
 
-      // Keep adding words until the token limit is reached
-      let words = text.split(" ");
-      for (let i = 0; i < words.length; i++) {
-        let tempText = truncatedText + (i > 0 ? " " : "") + words[i];
-        let currentTokenCount = await countTokens(tempText);
-        if (currentTokenCount > maxLength) break;
-        truncatedText = tempText;
-      }
+  // Step 3: If the token count exceeds maxLength, truncate the text
+  if (tokenCount > maxLength) {
+    let truncatedText = "";
+    const words = text.split(" ");
 
-      return truncatedText;
+    // Add words until the token limit is reached
+    for (let i = 0; i < words.length; i++) {
+      let tempText = truncatedText + (i > 0 ? " " : "") + words[i];
+      let currentTokenCount = await countTokens(tempText);
+
+      if (currentTokenCount > maxLength) break;
+      truncatedText = tempText;
     }
 
-    // If the token count is within the limit, return the full text
-    return text;
+    return truncatedText;
   }
+
+  // If the token count is within the limit, return the full text
+  return text;
 }
 
 
