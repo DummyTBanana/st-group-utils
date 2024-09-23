@@ -144,6 +144,7 @@ function rearrangeChat(chat){
         
                 if (note !== undefined && note !== null) {
                     notes.push(note);  // Push the note if it exists
+                    console.log(note)
                 }
                 
                 // Ensure that description and personality are added as well
