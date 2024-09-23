@@ -86,6 +86,7 @@ async function getText(text) {
     const tokens = await countTokens(element)
     if ((tokenCount + tokens) <= maxLength){
       tokenCount = tokenCount + tokens
+      console.log(`Adding Word ${element}: Token Count = ${tokens}; Total Tokens = ${tokenCount}`)
       truncatedWords.push(element)
     } else{
       break;
