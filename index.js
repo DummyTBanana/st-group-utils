@@ -176,6 +176,18 @@ window['gchar_genIntercept'] = rearrangeChat;
 
 // This function is called when the extension is loaded
 jQuery(async () => {
+  const target = $('#character_popup-button-h3')[0];
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+      if (mutation.type === 'childList' || mutation.type === 'characterData') {
+        const character_text = $(mutation.target).text();
+        const newValue = extension_settings[extensionName]['character_data'][character_text] || "";
+        $('#group_note_pole').val(newValue);
+      }
+    }
+  });
+  observer.observe(target, { characterData: true, childList: true, subtree: true });
+
   MacrosParser.registerMacro('char_list',function(){
     const context = getContext()
     const group = getGroup(context.groupId)
@@ -253,26 +265,4 @@ jQuery(async () => {
   })
 
   loadSettings();
-});
-$(document).ready(function() {
-  // Select the target h3 element
-  const target = $('h3')[0]; // Select the first h3 or you can be more specific with a class or id
-
-  // Create a mutation observer instance
-  const observer = new MutationObserver(function(mutationsList, observer) {
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'childList' || mutation.type === 'characterData') {
-        if (extension_settings[extensionName]['character_data'] == null || extension_settings[extensionName]['character_data'] == undefined){
-          extension_settings[extensionName]['character_data'] = {}
-        }
-        $(mutation.target).text(extension_settings[extensionName]['character_data'][character.name] || "")
-      }
-    }
-  });
-
-  // Configuration for the observer (watch for text changes)
-  const config = { characterData: true, childList: true, subtree: true };
-
-  // Start observing the target element
-  observer.observe(target, config);
 });
