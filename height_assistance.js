@@ -16,6 +16,7 @@ function PredictHeight(description){
     const heightRegex = /([\d]+)(\ {0,}(ft|foot|feet|inches|inch|inc|in|km)\ {0,}(tall){0,1})/g
     const regexTest = heightRegex.exec(description)
     console.log(description)
+    console.log(regexTest)
     if (regexTest && regexTest.groups && regexTest.groups.length >= 2){
         // contains an explicit regex
         const height = parseInt(regexTest.groups[0])
@@ -42,14 +43,15 @@ function PredictHeight(description){
         const measurement = keywordRegex.groups[0].toLowerCase()
         switch (measurement){
             case "tall":
-                return 6;
+                return 6*15;
             case "short":
-                return 4;
+                return 4*15;
             default:
-                return 5;
+                return 60; //measured in inches so 5 ft = 60 inches
         }
     }
-    return 5
+    console.warn("No height was found. Please include a height in the characters description if they are any taller or shorter than 5ft")
+    return 60 //measured in inches so 5 ft = 60 inches
 }
 
 function getGroup(groupId){
