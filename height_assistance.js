@@ -15,6 +15,7 @@ function getCharacterByName(name){
 function PredictHeight(description){
     const heightRegex = /([\d]+)(\ {0,}(ft|foot|feet|inches|inch|inc|in|km)\ {0,}(tall){0,1})/g
     const regexTest = heightRegex.exec(description)
+    console.log(description)
     if (regexTest && regexTest.groups && regexTest.groups.length >= 2){
         // contains an explicit regex
         const height = parseInt(regexTest.groups[0])
