@@ -12,6 +12,15 @@ function getCharacterByName(name){
     }
     return null;
 }
+function GetFtDifference(a, b) {
+    const aFt = a / 12;
+    const bFt = b / 12;
+    const diff = Math.abs(aFt - bFt).toFixed(2); // Use absolute value and round to 2 decimal places
+    if (diff < 1){
+        return `A ${a-b} inch height difference`;
+    }
+    return `A ${diff}ft height difference.`;
+}
 function PredictHeight(description){
     const heightRegex = /([\d]+)(\ {0,}(ft|foot|feet|inches|inch|inc|in|km)\ {0,}(tall){0,1})/g
     const regexTest = heightRegex.exec(description)
@@ -84,15 +93,15 @@ export async function onRearrangeChat(chat){
           const height = PredictHeight(desc)
           console.log(`Generating Characters Height: ${generatingHeight}, ${character.name}'s Height: ${height}`)
           if (generatingHeight < height){
-            system_notes.push(`[System Note: ${generating_name} must look up at ${character.name}]`)
+            system_notes.push(`[System Note: ${generating_name} must look up at ${character.name}. ${GetFtDifference(generatingHeight,height)}]`)
           } else if (generatingHeight > height) {
-            system_notes.push(`[System Note: ${generating_name} must look down at ${character.name}]`)
+            system_notes.push(`[System Note: ${generating_name} must look down at ${character.name}. ${GetFtDifference(generatingHeight,height)}]`)
           }else if (generatingHeight < height * 2){
-            system_notes.push(`[System Note: ${generating_name} must lean back and look up at ${character.name}]`)
+            system_notes.push(`[System Note: ${generating_name} must lean back and look up at ${character.name}. ${GetFtDifference(generatingHeight,height)}]`)
           } else if (generatingHeight > height * 2) {
-            system_notes.push(`[System Note: ${generating_name} must look and lean down at ${character.name}]`)
+            system_notes.push(`[System Note: ${generating_name} must look and lean down at ${character.name}. ${GetFtDifference(generatingHeight,height)}]`)
           } else {
-            system_notes.push(`[System Note: ${generating_name} is same height as ${character.name}]`)
+            system_notes.push(`[System Note: ${generating_name} is same height as ${character.name}. ${GetFtDifference(generatingHeight,height)}]`)
           }
         }
       }
