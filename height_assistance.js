@@ -1,4 +1,7 @@
 import { characters } from "../../../../script.js";
+import { extension_settings, getContext } from "../../../extensions.js";
+const extensionName = "st-group-utils";
+
 function getCharacterByName(name){
     for (let i = 0; i < characters.length; i++) {
       const element = characters[i];
