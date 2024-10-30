@@ -82,6 +82,7 @@ export async function onRearrangeChat(chat){
         if (character.description.length > 0 && character.personality.length > 0) {
           const desc = character.description;
           const height = PredictHeight(desc)
+          console.log(`Generating Characters Height: ${generatingHeight}, ${character.name}'s Height: ${height}`)
           if (generatingHeight < height){
             system_notes.push(`[System Note: ${character.name} must look up at ${generating_name}]`)
           } else if (generatingHeight > height) {
