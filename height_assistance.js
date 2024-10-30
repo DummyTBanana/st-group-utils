@@ -1,5 +1,6 @@
 import { characters } from "../../../../script.js";
 import { extension_settings, getContext } from "../../../extensions.js";
+import { groups } from "../../../group-chats.js";
 const extensionName = "st-group-utils";
 
 function getCharacterByName(name){
@@ -48,6 +49,14 @@ function PredictHeight(description){
         }
     }
     return 5
+}
+
+function getGroup(groupId){
+  const group = groups.find((x) => x.id.toString() === groupId);
+  if (!group) {
+    return;
+  }
+  return group
 }
 
 export async function onRearrangeChat(chat){
