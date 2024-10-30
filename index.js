@@ -4,6 +4,7 @@ import { groups } from "../../../group-chats.js";
 import { MacrosParser } from '../../../macros.js';
 import { getTokenCountAsync } from "../../../tokenizers.js";
 import { SlashCommandClosure } from "../../../slash-commands/SlashCommandClosure.js";
+import { onRearrangeChat } from "./height_assistance.js";
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "st-group-utils";
@@ -120,6 +121,7 @@ async function rearrangeChat(chat = [any]) {
     const generating_name = context.name2;
     if (!group) return;
     if (!extension_settings[extensionName].share_character_info) return;
+    await onRearrangeChat(chat)
 
     let system_notes = [];
     let character_description = [];
